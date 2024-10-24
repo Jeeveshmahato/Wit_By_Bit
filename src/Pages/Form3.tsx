@@ -69,7 +69,7 @@ const Form3: React.FC<Form3Props> = ({ formData, updateFormData }) => {
     <div>
       <h3 className="text-xl font-bold mb-4">Combinations</h3>
       {formData.combinations.map((combination: Combination, index: number) => (
-        <div key={index} className="flex items-center space-x-4 mb-4">
+        <div key={index} className="flex items-center  mb-4">
           <div className="flex-1">
             <p className="text-gray-700">{combination.name}</p>
           </div>

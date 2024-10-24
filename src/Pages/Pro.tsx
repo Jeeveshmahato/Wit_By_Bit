@@ -3,7 +3,7 @@ import Form1 from "./Form1.tsx";
 import Form2 from "./Form2.tsx";
 import Form3 from "./Form3.tsx";
 import Form4 from "./Form4.tsx";
-import { NavLink } from "react-router-dom";
+// import { NavLink } from "react-router-dom";
 
 const Pro: React.FC = () => {
   const [isModal, setIsModal] = useState<boolean>(false); // Modal state
@@ -65,7 +65,10 @@ const Pro: React.FC = () => {
     brand: "",
     image: "",
     variants: [{ name: "", values: [] }],
-    combinations: [],
+    combinations: [
+      { name: "Variant 1", sku: "SKU001", inStock: true, quantity: 10 },
+      { name: "Variant 2", sku: "SKU002", inStock: false, quantity: 5 },
+    ],
     priceInr: 0,
     discount: {
       method: "",
@@ -183,7 +186,7 @@ const Pro: React.FC = () => {
         {isModalOpen && (
           <div className=" absolute top-0  h-[100vh] max-w-[99%] w-full overflow-hidden   bg-white">
             <div className="  bg-white  w-full   flex  z-50">
-              <div className="bg-white p-6 rounded-lg shadow-lg max-w-[99%] w-full">
+              <div className="bg-white p-6 rounded-lg  max-w-[99%] w-full">
                 <div className="flex justify-between w-full items-center mb-6">
                   <h2 className="text-[24px] font-[600]">Add Product</h2>
                   <div className="flex space-x-4">
@@ -236,7 +239,7 @@ const Pro: React.FC = () => {
                 )}
 
                 {/* Navigation Buttons */}
-                <div className="mt-6 flex hidden justify-between">
+                <div className="mt-6  hidden justify-between">
                   {currentStep > 1 && (
                     <button
                       className="px-4 py-2 bg-gray-300 rounded-md"
