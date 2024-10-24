@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { NavLink } from "react-router-dom";
 
 const ProductList: React.FC = () => {
-  const [isModalOpen, setIsModalOpen] = useState<boolean>(false); // Modal state
+  const [isModal, setIsModal] = useState<boolean>(false); // Modal state
   const [categoryName, setCategoryName] = useState<string>(""); // Input state for category name
 
   const products = [
@@ -30,17 +30,17 @@ const ProductList: React.FC = () => {
   ];
 
   const handleAddCategory = () => {
-    setIsModalOpen(true); // Show the modal when Add Category is clicked
+    setIsModal(true); // Show the modal when Add Category is clicked
   };
 
   const handleCloseModal = () => {
-    setIsModalOpen(false); // Close the modal
+    setIsModal(false); // Close the modal
   };
 
   const handleSaveCategory = () => {
     // Add functionality to save the new category here
     console.log("Category saved:", categoryName);
-    setIsModalOpen(false); // Close the modal after saving
+    setIsModal(false); // Close the modal after saving
   };
 
   return (
@@ -73,7 +73,9 @@ const ProductList: React.FC = () => {
               key={idx}
               className="flex-1 bg-gray-50 p-4 rounded shadow-sm border border-gray-200"
             >
-              <h3 className="font-semibold text-lg mb-4">{productCategory.category}</h3>
+              <h3 className="font-semibold text-lg mb-4">
+                {productCategory.category}
+              </h3>
               {productCategory.items.length > 0 ? (
                 productCategory.items.map((product, index) => (
                   <div
@@ -103,12 +105,14 @@ const ProductList: React.FC = () => {
       </div>
 
       {/* Modal for Adding Category */}
-      {isModalOpen && (
+      {isModal && (
         <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
           <div className="bg-white p-6 rounded-lg shadow-lg max-w-sm w-full">
             <h2 className="text-xl font-bold mb-4">Add category</h2>
             <div>
-              <label className="block text-gray-700 mb-2">Category name *</label>
+              <label className="block text-gray-700 mb-2">
+                Category name *
+              </label>
               <input
                 type="text"
                 className="border border-gray-300 p-2 rounded w-full"

@@ -117,6 +117,15 @@ const Sidebar: React.FC = () => {
                       Settings
                     </Link>
                   </li>
+                  <li
+                    className={`mb-4 ${
+                      location.pathname === "/pro" ? "font-bold" : ""
+                    }`}
+                  >
+                    <Link to="/pro" className="block hover:text-blue-400">
+                      Pro
+                    </Link>
+                  </li>
                 </ul>
               </div>
               <div className="flex items-center p-4 bg-card rounded-lg">

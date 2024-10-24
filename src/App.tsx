@@ -9,16 +9,17 @@ import Docs from './Pages/Docs.tsx';
 import Promotions from './Pages/Promotions.tsx';
 import Reports from './Pages/Reports.tsx';
 import ProductList from './Pages/Products.tsx';
+import Pro from './Pages/Pro.tsx';
 
 const App: React.FC = () => {
   return (
     <Router>
-      <div className="flex h-[100vh] font-work-sans">
+      <div className="flex h-[100vh] overflow-hidden font-work-sans">
         {/* Sidebar */}
         <Sidebar />
 
         {/* Main Content */}
-        <div className="flex-1 p-8 h-full bg-white">
+        <div className="flex-1 p-2 md:p-4 lg:p-8 h-full bg-white">
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/stores" element={<Stores />} />
@@ -28,6 +29,7 @@ const App: React.FC = () => {
             <Route path="/Docs" element={<Docs />} />
             <Route path="/Promotions" element={<Promotions />} />
             <Route path="/Reports" element={<Reports />} />
+            <Route path="/Pro" element={<Pro />} />
 
          
           </Routes>
