@@ -14,9 +14,10 @@ import Pro from './Pages/Pro.tsx';
 const App: React.FC = () => {
   return (
     <Router>
-      <div className="flex h-[100vh] overflow-hidden font-work-sans">
+      <div className="flex h-full overflow-hidden font-work-sans">
         {/* Sidebar */}
         <Sidebar />
+        <div className=" w-[1px] h-[100vh] bg-[#ebebeb] border border-[#ebebeb] mx-[24px]"></div>
 
         {/* Main Content */}
         <div className="flex-1 p-2 md:p-4 lg:p-8 h-full bg-white">

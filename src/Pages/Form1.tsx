@@ -1,66 +1,64 @@
-import React, { ChangeEvent } from "react";
+import React from "react";
+import { UseFormRegister } from "react-hook-form";
 
 interface Form1Props {
-  formData: any;
-  updateFormData: (data: any) => void;
+  register: UseFormRegister<any>;
+  errors: any;
 }
 
-const Form1: React.FC<Form1Props> = ({ formData, updateFormData }) => {
-  const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-    const { name, value } = e.target;
-    updateFormData({ [name]: value });
-  };
-
+const Form1: React.FC<Form1Props> = ({ register, errors }) => {
   return (
     <div>
-      <h3 className="text-xl font-bold mb-4">Description</h3>
+      <h3 className="text-xl font-bold mb-4">Product Details</h3>
+
       <div className="mb-4">
-        <label className="block text-gray-700 mb-2">Product name *</label>
+        <label>Product Name *</label>
         <input
-          type="text"
-          name="productName"
-          value={formData.productName}
-          onChange={handleChange}
+          {...register("products.name", { required: "Product name is required" })}
           className="border border-gray-300 p-2 rounded w-full"
           placeholder="Enter product name"
         />
+        {errors.products?.name && (
+          <span className="text-red-500">{errors.products.name.message}</span>
+        )}
       </div>
 
       <div className="mb-4">
-        <label className="block text-gray-700 mb-2">Category *</label>
+        <label>Category *</label>
         <select
-          name="category"
-          value={formData.category}
-          onChange={handleChange}
+          {...register("products.category", { required: "Category is required" })}
           className="border border-gray-300 p-2 rounded w-full"
         >
           <option value="Shoes">Shoes</option>
           <option value="T-shirt">T-shirt</option>
         </select>
+        {errors.products?.category && (
+          <span className="text-red-500">{errors.products.category.message}</span>
+        )}
       </div>
 
       <div className="mb-4">
-        <label className="block text-gray-700 mb-2">Brand *</label>
+        <label>Brand *</label>
         <input
-          type="text"
-          name="brand"
-          value={formData.brand}
-          onChange={handleChange}
+          {...register("products.brand", { required: "Brand is required" })}
           className="border border-gray-300 p-2 rounded w-full"
           placeholder="Enter brand"
         />
+        {errors.products?.brand && (
+          <span className="text-red-500">{errors.products.brand.message}</span>
+        )}
       </div>
 
-      {/* Upload image */}
-      <div className="relative inline-block">
-        <button className="flex items-center px-4 py-2 border border-[#1F8CD0] rounded-md text-[#1F8CD0] hover:bg-blue-50">
-          Upload Image
-          <input
-            type="file"
-            onChange={(e: any) => updateFormData({ image: e.target.files[0] })}
-            className="absolute inset-0 opacity-0 cursor-pointer"
-          />
-        </button>
+      <div className="mb-4">
+        <label>Upload Image *</label>
+        <input
+          type="file"
+          {...register("products.image", { required: "Image is required" })}
+          className="border border-gray-300 p-2 rounded w-full"
+        />
+        {errors.products?.image && (
+          <span className="text-red-500">{errors.products.image.message}</span>
+        )}
       </div>
     </div>
   );
