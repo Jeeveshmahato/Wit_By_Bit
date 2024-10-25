@@ -1,5 +1,6 @@
 import React from "react";
 import { UseFormRegister } from "react-hook-form";
+import { RiArrowRightSLine } from "react-icons/ri";
 
 interface Form4Props {
   register: UseFormRegister<any>;
@@ -8,7 +9,32 @@ interface Form4Props {
 
 const Form4: React.FC<Form4Props> = ({ register, errors }) => {
   return (
-    <div>
+   <>
+   {/* Steps */}
+   <div className="flex items-center space-x-4 mb-8">
+        <span className=" text-[#1F8CD0] text-[14px] font-[500] bg-[#DAEDF9] rounded-[8px] py-1 px-2">
+          Description
+        </span>
+        <span className="text-gray-400">
+          <RiArrowRightSLine />
+        </span>
+        <span className="text-[#1F8CD0] text-[14px] font-[500] bg-[#DAEDF9] rounded-[8px] py-1 px-2">
+          Variants
+        </span>
+        <span className="text-gray-400">
+          <RiArrowRightSLine />
+        </span>
+        <span className="text-[#1F8CD0] text-[14px] font-[500] bg-[#DAEDF9] rounded-[8px] py-1 px-2">
+          Combinations
+        </span>
+        <span className="text-gray-400">
+          <RiArrowRightSLine />
+        </span>
+        <span className="text-[#1F8CD0] text-[14px] font-[500] bg-[#DAEDF9] rounded-[8px] py-1 px-2">
+          Price info
+        </span>
+      </div>
+    <div className="shadow-[0_0_20px_-2px_rgba(0,0,0,0.1)] p-[24px]">
       <h3 className="text-xl font-bold mb-4">Price & Discount</h3>
 
       <div className="mb-4">
@@ -51,6 +77,7 @@ const Form4: React.FC<Form4Props> = ({ register, errors }) => {
         )}
       </div>
     </div>
+   </>
   );
 };
 

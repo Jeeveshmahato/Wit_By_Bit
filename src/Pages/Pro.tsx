@@ -4,7 +4,8 @@ import Form1 from "./Form1.tsx";
 import Form2 from "./Form2.tsx";
 import Form3 from "./Form3.tsx";
 import Form4 from "./Form4.tsx";
-import { NavLink } from "react-router-dom";
+import ProductImage from "../assets/Shoes1.png";
+
 type FormValues = {
   products: {
     name: string;
@@ -28,28 +29,32 @@ type FormValues = {
 
 const Pro: React.FC = () => {
   const [isModal, setIsModal] = useState<boolean>(false); // Modal state for category
-  const [isModalProduct, setIsModalProduct] = useState<boolean>(false); // Modal state for category
+  const [isProduct, setIsProduct] = useState<boolean>(false); // Modal state for product
   const [categoryName, setCategoryName] = useState<string>(""); // Input state for category name
   const [currentStep, setCurrentStep] = useState(1);
+
+  // Function to open "Add Category" modal
   const handleAddCategory = () => {
-    setIsModal(true); // Show the modal when Add Category is clicked
+    setIsModal(true);
+  };
+
+  // Function to open "Add Product" modal
+  const handleAddProduct = () => {
+    setIsProduct(!isProduct);
   };
 
   const handleCloseModal = () => {
-    setIsModal(false); // Close the modal
+    setIsModal(false);
   };
 
   const handleSaveCategory = () => {
-    // Add functionality to save the new category here
     console.log("Category saved:", categoryName);
-    setIsModal(false); // Close the modal after saving
+    setIsModal(false);
   };
+
   const {
     handleSubmit,
-    control,
     register,
-    setValue,
-    watch,
     formState: { errors },
   } = useForm<FormValues>({
     defaultValues: {
@@ -75,6 +80,14 @@ const Pro: React.FC = () => {
       ],
     },
   });
+
+  const nextStep = () => setCurrentStep((prev) => Math.min(prev + 1, 4));
+  const prevStep = () => setCurrentStep((prev) => Math.max(prev - 1, 1));
+
+  const onSubmit: SubmitHandler<FormValues> = (data) => {
+    console.log("Final Form Data:", JSON.stringify(data, null, 2));
+    setIsProduct(false); // Close the product modal after submission
+  };
   const products = [
     {
       category: "Shoes",
@@ -83,13 +96,13 @@ const Pro: React.FC = () => {
           name: "Nike Air Jordan",
           price: "₹12,000",
           brand: "Nike",
-          image: "https://via.placeholder.com/100", // Replace with actual image URL
+          image: `${ProductImage}`, // Replace with actual image URL
         },
         {
           name: "Nike Dunk Low",
           price: "₹8,000",
           brand: "Nike",
-          image: "https://via.placeholder.com/100", // Replace with actual image URL
+          image: `${ProductImage}`, // Replace with actual image URL
         },
       ],
     },
@@ -99,38 +112,142 @@ const Pro: React.FC = () => {
     },
   ];
 
-  const nextStep = () => setCurrentStep((prev) => Math.min(prev + 1, 4));
-  const prevStep = () => setCurrentStep((prev) => Math.max(prev - 1, 1));
-
-  const onSubmit: SubmitHandler<FormValues> = (data) => {
-    console.log("Final Form Data:", JSON.stringify(data, null, 2));
-  };
-
   return (
     <>
       <div className="flex flex-col md:flex-row gap-6 p-4">
-        {/* Sidebar */}
+        {}
 
-        {/* Main Content */}
-        <div className="flex-1">
-          <div className="flex justify-between items-center mb-6">
-            <h2 className="text-[24px] font-[600]">Products</h2>
-            <div className="flex space-x-4">
-              <button
-                className="px-4 py-2 bg-[#E1E7EB] text-[16px] font-[600] rounded text-[#1F8CD0] hover:bg-gray-300"
-                onClick={handleAddCategory}
-              >
-                Add Category
-              </button>
-              <button className="px-4 py-2 text-[16px] font-[600] bg-[#1F8CD0] text-white rounded hover:bg-blue-700">
-                Add Product
-              </button>
+        {/* Modal for Adding Category */}
+        {isModal && (
+          <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
+            <div className="bg-white p-6 rounded-lg shadow-lg max-w-sm w-full">
+              <h2 className="text-xl font-bold mb-4">Add category</h2>
+              <div>
+                <label className="block text-gray-700 mb-2">
+                  Category name *
+                </label>
+                <input
+                  type="text"
+                  className="border border-gray-300 p-2 rounded w-full"
+                  value={categoryName}
+                  onChange={(e) => setCategoryName(e.target.value)}
+                  placeholder="Enter category name"
+                />
+              </div>
+              <div className="flex justify-end space-x-4 mt-4">
+                <button
+                  className="px-4 py-2 bg-[#E1E7EB] text-[16px] font-[600] rounded text-[#1F8CD0] hover:bg-gray-300"
+                  onClick={handleCloseModal}
+                >
+                  Cancel
+                </button>
+                <button
+                  className="px-4 py-2 text-[16px] font-[600] bg-[#1F8CD0] text-white rounded hover:bg-blue-700"
+                  onClick={handleSaveCategory}
+                >
+                  Save
+                </button>
+              </div>
             </div>
           </div>
+        )}
 
-          {/* Product Categories */}
-          {isModal && (
-            <div className="flex w-full lg:w-[60%] h-[100vh] space-x-6">
+        {/*  Adding Product */}
+        {isProduct ? (
+          <form
+            onSubmit={handleSubmit(onSubmit)}
+            className="bg-white rounded-lg   w-full"
+          >
+            <div className="flex justify-between items-center mb-6">
+              <h2 className="text-[24px] font-[600]">Add Product</h2>
+              <div className="flex space-x-4">
+                {currentStep === 1 && (
+                  <button onClick={handleAddProduct} type="button" className="px-4 py-2 bg-[#E1E7EB] w-[160px] text-[16px] font-[600] rounded text-[#1F8CD0] hover:bg-gray-300">
+                    Cancel
+                  </button>
+                )}
+                {currentStep > 1 && currentStep <= 4 && (
+                  <button type="button"
+                    onClick={prevStep}
+                    className="px-4 py-2 bg-[#E1E7EB] w-[160px] text-[16px] font-[600] rounded text-[#1F8CD0] hover:bg-gray-300"
+                  >
+                    Back
+                  </button>
+                )}
+                {currentStep > 0 && currentStep < 4 && (
+                  <button type="button"
+                    onClick={nextStep}
+                    className="px-4 py-2 text-[16px] font-[600] bg-[#1F8CD0] text-white rounded hover:bg-blue-700 w-[160px]"
+                  >
+                    Next
+                  </button>
+                )}
+
+                {currentStep === 4 && (
+                  <button 
+                    type="submit"
+                    className="px-4 py-2 text-[16px] font-[600] bg-[#1F8CD0] text-white rounded hover:bg-blue-700 w-[160px]"
+                  >
+                    Submit
+                  </button>
+                )}
+              </div>
+            </div>
+            {/* Display form steps based on `currentStep` */}
+            {currentStep === 1 && <Form1 register={register} errors={errors} />}
+            {currentStep === 2 && <Form2 register={register} errors={errors} />}
+            {currentStep === 3 && <Form3 register={register} errors={errors} />}
+            {currentStep === 4 && <Form4 register={register} errors={errors} />}
+            <div className=" hidden justify-between mt-4">
+              {currentStep > 1 && (
+                <button
+                  type="button"
+                  onClick={prevStep}
+                  className="px-4 py-2 bg-gray-300 rounded-md"
+                >
+                  Previous
+                </button>
+              )}
+              {currentStep < 4 ? (
+                <button
+                  type="button"
+                  onClick={nextStep}
+                  className="px-4 py-2 bg-blue-500 text-white rounded-md"
+                >
+                  Next
+                </button>
+              ) : (
+                <button
+                  type="submit"
+                  className="px-4 py-2 bg-green-500 text-white rounded-md"
+                >
+                  Submit
+                </button>
+              )}
+            </div>
+          </form>
+        ) : (
+          <div className="flex-1 h-full">
+            <div className="flex justify-between items-center mb-6">
+              <h2 className="text-[24px] font-[600]">Products</h2>
+              <div className="flex space-x-4">
+                <button
+                  className="px-4 py-2  bg-[#E1E7EB] text-[16px] font-[600] rounded text-[#1F8CD0] hover:bg-gray-300"
+                  onClick={handleAddCategory}
+                >
+                  Add Category
+                </button>
+                <button
+                  className="px-4 py-2 text-[16px] font-[600] bg-[#1F8CD0] text-white rounded hover:bg-blue-700"
+                  onClick={handleAddProduct}
+                >
+                  Add Product
+                </button>
+              </div>
+            </div>
+
+            {/* Product Categories */}
+            <div className="flex lg:flex-row flex-col w-full xl:w-[80%]  2xl:w-[70%] h-[100vh] gap-6">
               {products.map((productCategory, idx) => (
                 <div
                   key={idx}
@@ -165,34 +282,7 @@ const Pro: React.FC = () => {
                 </div>
               ))}
             </div>
-          )}
-        </div>
-
-        {/* Modal for Adding Category */}
-        {isModalProduct && (
-          <form onSubmit={handleSubmit(onSubmit)} className="container">
-            <h2>Add Product</h2>
-
-            {currentStep === 1 && <Form1 register={register} errors={errors} />}
-            {currentStep === 2 && <Form2 register={register} errors={errors} />}
-            {currentStep === 3 && <Form3 register={register} errors={errors} />}
-            {currentStep === 4 && <Form4 register={register} errors={errors} />}
-
-            <div className="step-buttons">
-              {currentStep > 1 && (
-                <button type="button" onClick={prevStep}>
-                  Previous
-                </button>
-              )}
-              {currentStep < 4 ? (
-                <button type="button" onClick={nextStep}>
-                  Next
-                </button>
-              ) : (
-                <button type="submit">Submit</button>
-              )}
-            </div>
-          </form>
+          </div>
         )}
       </div>
     </>

@@ -1,5 +1,6 @@
 import React from "react";
 import { UseFormRegister } from "react-hook-form";
+import { RiArrowRightSLine } from "react-icons/ri";
 
 interface Form1Props {
   register: UseFormRegister<any>;
@@ -8,13 +9,38 @@ interface Form1Props {
 
 const Form1: React.FC<Form1Props> = ({ register, errors }) => {
   return (
-    <div>
-      <h3 className="text-xl font-bold mb-4">Product Details</h3>
-
+   <>
+   <div className="flex items-center space-x-4 mb-8">
+        <span className=" text-[#1F8CD0] text-[14px] font-[500] bg-[#DAEDF9] rounded-[8px] py-1 px-2">
+          Description
+        </span>
+        <span className="text-gray-400">
+          <RiArrowRightSLine />
+        </span>
+        <span className="text-[14px] font-[500] text-[#808080]">Variants</span>
+        <span className="text-gray-400">
+          <RiArrowRightSLine />
+        </span>
+        <span className="text-[14px] font-[500] text-[#808080]">
+          Combinations
+        </span>
+        <span className="text-gray-400">
+          <RiArrowRightSLine />
+        </span>
+        <span className="text-[14px] font-[500] text-[#808080]">
+          Price info
+        </span>
+      </div>
+    <div className="shadow-[0_0_20px_-2px_rgba(0,0,0,0.1)] p-[24px]">
+      <h3 className="text-[16px] font-[600] text-black mb-4">Description</h3>
+      
       <div className="mb-4">
         <label>Product Name *</label>
+
         <input
-          {...register("products.name", { required: "Product name is required" })}
+          {...register("products.name", {
+            required: "Product name is required",
+          })}
           className="border border-gray-300 p-2 rounded w-full"
           placeholder="Enter product name"
         />
@@ -24,16 +50,19 @@ const Form1: React.FC<Form1Props> = ({ register, errors }) => {
       </div>
 
       <div className="mb-4">
-        <label>Category *</label>
         <select
-          {...register("products.category", { required: "Category is required" })}
+          {...register("products.category", {
+            required: "Category is required",
+          })}
           className="border border-gray-300 p-2 rounded w-full"
         >
           <option value="Shoes">Shoes</option>
           <option value="T-shirt">T-shirt</option>
         </select>
         {errors.products?.category && (
-          <span className="text-red-500">{errors.products.category.message}</span>
+          <span className="text-red-500">
+            {errors.products.category.message}
+          </span>
         )}
       </div>
 
@@ -61,6 +90,7 @@ const Form1: React.FC<Form1Props> = ({ register, errors }) => {
         )}
       </div>
     </div>
+   </>
   );
 };
 
