@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { UseFormRegister } from "react-hook-form";
 import { RiArrowRightSLine } from "react-icons/ri";
 
@@ -8,11 +8,13 @@ interface Form4Props {
 }
 
 const Form4: React.FC<Form4Props> = ({ register, errors }) => {
+  const [selected, setSelected] = useState("%");
+
   return (
-   <>
-   {/* Steps */}
-   <div className="flex items-center space-x-4 mb-8">
-        <span className=" text-[#1F8CD0] text-[14px] font-[500] bg-[#DAEDF9] rounded-[8px] py-1 px-2">
+    <>
+      {/* Steps */}
+      <div className="flex items-center space-x-4 mb-8">
+        <span className="text-[#1F8CD0] text-[14px] font-[500] bg-[#DAEDF9] rounded-[8px] py-1 px-2">
           Description
         </span>
         <span className="text-gray-400">
@@ -34,50 +36,60 @@ const Form4: React.FC<Form4Props> = ({ register, errors }) => {
           Price info
         </span>
       </div>
-    <div className="shadow-[0_0_20px_-2px_rgba(0,0,0,0.1)] p-[24px]">
-      <h3 className="text-xl font-bold mb-4">Price & Discount</h3>
 
-      <div className="mb-4">
-        <label>Price (INR) *</label>
-        <input
-          type="number"
-          {...register("products.priceInr", { required: "Price is required" })}
-          className="border border-gray-300 p-2 rounded w-full"
-          placeholder="Enter price"
-        />
-        {errors.products?.priceInr && (
-          <span className="text-red-500">{errors.products.priceInr.message}</span>
-        )}
-      </div>
+      <div className="shadow-[0_0_20px_-2px_rgba(0,0,0,0.1)] p-[24px] lg:w-[60%] w-full">
+        <h3 className="text-xl font-bold mb-4">Price & Discount</h3>
 
-      <div className="mb-4">
-        <label>Discount *</label>
-        <input
-          type="number"
-          {...register("products.discount.value", { required: "Discount is required" })}
-          className="border border-gray-300 p-2 rounded w-full"
-          placeholder="Enter discount"
-        />
-        {errors.products?.discount?.value && (
-          <span className="text-red-500">{errors.products.discount.value.message}</span>
-        )}
-      </div>
+        <div className="mb-4">
+          <label>Price (INR) *</label>
+          <input
+            type="number"
+            {...register("products.priceInr", { required: "Price is required" })}
+            className="border border-gray-300 p-2 rounded w-full"
+            placeholder="Enter price"
+          />
+          {errors.products?.priceInr && (
+            <span className="text-red-500">{errors.products.priceInr.message}</span>
+          )}
+        </div>
 
-      <div className="mb-4">
-        <label>Discount Method *</label>
-        <select
-          {...register("products.discount.method", { required: "Discount method is required" })}
-          className="border border-gray-300 p-2 rounded w-full"
-        >
-          <option value="pct">Percentage</option>
-          <option value="amt">Amount</option>
-        </select>
-        {errors.products?.discount?.method && (
-          <span className="text-red-500">{errors.products.discount.method.message}</span>
-        )}
+        <div className="mb-4 flex items-center gap-[20px]">
+          <div>
+            <label>Discount *</label>
+            <input
+              type="number"
+              {...register("products.discount.value", { required: "Discount is required" })}
+              className="border border-gray-300 p-2 rounded w-full"
+              placeholder="Enter discount"
+            />
+            {errors.products?.discount?.value && (
+              <span className="text-red-500">{errors.products.discount.value.message}</span>
+            )}
+          </div>
+
+          <div className="inline-flex self-end items-center h-fit border border-gray-300 rounded-md overflow-hidden">
+            <button
+              type="button" // Added type="button" to prevent form submission
+              onClick={() => setSelected("%")}
+              className={`px-4 py-2 ${
+                selected === "%" ? "bg-blue-100 text-black" : "bg-white text-gray-500"
+              }`}
+            >
+              %
+            </button>
+            <button
+              type="button" // Added type="button" to prevent form submission
+              onClick={() => setSelected("$")}
+              className={`px-4 py-2 ${
+                selected === "$" ? "bg-blue-100 text-black" : "bg-white text-gray-500"
+              }`}
+            >
+              $
+            </button>
+          </div>
+        </div>
       </div>
-    </div>
-   </>
+    </>
   );
 };
 
