@@ -15,7 +15,7 @@ const Sidebar: React.FC = () => {
     <>
       <div className="h-full">
         {/* Hamburger Icon for Small Screens */}
-        <div className="md:hidden flex items-center p-4 bg-gray-800 text-white">
+        <div className="md:hidden flex items-center p-2 bg-gray-800 text-white">
           <button onClick={toggleSidebar}>
             {/* Hamburger Icon */}
             <svg
@@ -33,11 +33,10 @@ const Sidebar: React.FC = () => {
               ></path>
             </svg>
           </button>
-          <span className="ml-4 text-xl">Menu</span>
         </div>
 
         {/* Sidebar */}
-        <div className="flex justify-between flex-col h-full">
+        <div className="flex lg:justify-between flex-col h-full">
           <div
             className={`fixed inset-y-0 h-full w-fit left-0 z-50 bg-gray-800 md:bg-white text-white md:text-gray-800 transform ${
               isOpen ? "translate-x-0" : "-translate-x-full"
@@ -157,7 +156,7 @@ const Sidebar: React.FC = () => {
                       Settings
                     </Link>
                   </li>
-                  <li
+                  {/* <li
                     className={`mb-4 items-center  flex gap-[10px] ${
                       location.pathname === "/pro"
                         ? " font-[500] text-[14px] bg-[#ecf7ff] py-[10px] px-[16px]  text-[#1f8cd0]"
@@ -169,7 +168,7 @@ const Sidebar: React.FC = () => {
                     <Link to="/pro" className="block hover:text-[#1f8cd0]">
                       Pro
                     </Link>
-                  </li>
+                  </li> */}
                 </ul>
               </div>
               <div className="flex gap-[8px] items-center p-4 bg-card rounded-lg">

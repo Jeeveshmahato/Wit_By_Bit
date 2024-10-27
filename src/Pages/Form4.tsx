@@ -12,7 +12,7 @@ const Form4: React.FC<Form4Props> = ({ register, errors }) => {
   const [discountType, setDiscountType] = useState("%");
 
   return (
-    <div className="p-6 shadow-[0_0_20px_-2px_rgba(0,0,0,0.1)] p-[24px] flex flex-col lg:w-[60%] w-full gap-[24px">
+    <div className=" shadow-[0_0_20px_-2px_rgba(0,0,0,0.1)] p-[24px] flex flex-col lg:w-[60%] w-full gap-[24px">
       <h3 className="text-[16px] font-[600] mb-4">Price Info</h3>
       <div>
         <label className=" text-[14px] font-[400]" htmlFor="">
