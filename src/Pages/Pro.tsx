@@ -1,21 +1,14 @@
 import React, { useState } from "react";
-import { useForm, SubmitHandler, Control } from "react-hook-form";
+import { useForm, SubmitHandler } from "react-hook-form";
 import Form1 from "./Form1.tsx";
 import Form2 from "./Form2.tsx";
 import Form3 from "./Form3.tsx";
 import Form4 from "./Form4.tsx";
 import ProductImage from "../assets/Shoes1.png";
 
-type Combination = {
+type Category = {
+  id: string;
   name: string;
-  sku: string;
-  quantity: number | null;
-  inStock: boolean;
-};
-
-type Variant = {
-  name: string;
-  values: string[];
 };
 
 type FormValues = {
@@ -24,18 +17,22 @@ type FormValues = {
     category: string;
     brand: string;
     image: string;
-    variants: Variant[];
-    combinations: Combination[];  // Changed to an array of Combination objects
+    variants: { name: string; values: string[] }[];
+    combinations: { name: string; sku: string; quantity: number | null; inStock: boolean }[];
     priceInr: number;
     discount: { method: string; value: number };
   };
-  categories: { id: string; name: string }[];  // Added 'name' to categories
+  categories: Category[];
 };
 
 const Pro: React.FC = () => {
-  const [isModal, setIsModal] = useState<boolean>(false);
-  const [isProduct, setIsProduct] = useState<boolean>(false);
-  const [categoryName, setCategoryName] = useState<string>("");
+  const [isModal, setIsModal] = useState(false);
+  const [isProduct, setIsProduct] = useState(false);
+  const [categoryName, setCategoryName] = useState("");
+  const [categories, setCategories] = useState<Category[]>([
+    { id: "abc", name: "Shoes" },
+    { id: "xyz", name: "T-shirt" },
+  ]);
   const [currentStep, setCurrentStep] = useState(1);
 
   const handleAddCategory = () => {
@@ -52,16 +49,17 @@ const Pro: React.FC = () => {
   };
 
   const handleSaveCategory = () => {
-    console.log("Category saved:", categoryName);
-    setIsModal(false);
+    if (categoryName.trim()) {
+      const newCategory = { id: Date.now().toString(), name: categoryName };
+      const updatedCategories = [...categories, newCategory];
+      setCategories(updatedCategories);
+      setCategoryName("");
+      setIsModal(false);
+      console.log("Updated Categories:", updatedCategories);
+    }
   };
 
-  const {
-    handleSubmit,
-    register,
-    control, // Add 'control' to use with field arrays
-    formState: { errors },
-  } = useForm<FormValues>({
+  const { handleSubmit, register, control, formState: { errors } } = useForm<FormValues>({
     defaultValues: {
       products: {
         name: "",
@@ -72,17 +70,14 @@ const Pro: React.FC = () => {
           { name: "Size", values: ["M", "L"] },
           { name: "Color", values: ["Black", "Red"] },
         ],
-        combinations: [ // Changed to an array
+        combinations: [
           { name: "M/Black", sku: "ABC12", quantity: 4, inStock: false },
-          { name: "L/Red", sku: "ABC12", quantity: 9, inStock: true },
+          { name: "L/Red", sku: "DEF34", quantity: 9, inStock: true },
         ],
         priceInr: 500,
         discount: { method: "pct", value: 12 },
       },
-      categories: [
-        { id: "abc", name: "Shoes" },
-        { id: "xyz", name: "T-shirt" },
-      ],
+      categories,
     },
   });
   const products = [
@@ -108,9 +103,6 @@ const Pro: React.FC = () => {
       items: [],
     },
   ];
-  const nextStep = () => setCurrentStep((prev) => Math.min(prev + 1, 4));
-  const prevStep = () => setCurrentStep((prev) => Math.max(prev - 1, 1));
-
   const onSubmit: SubmitHandler<FormValues> = (data) => {
     console.log("Final Form Data:", JSON.stringify(data, null, 2));
     setIsProduct(false);
@@ -119,15 +111,12 @@ const Pro: React.FC = () => {
   return (
     <>
       <div className="flex flex-col md:flex-row gap-6 p-4">
-        {/* Modal for Adding Category */}
         {isModal && (
           <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
             <div className="bg-white p-6 rounded-lg shadow-lg max-w-sm w-full">
               <h2 className="text-xl font-bold mb-4">Add category</h2>
               <div>
-                <label className="block text-gray-700 mb-2">
-                  Category name *
-                </label>
+                <label className="block text-gray-700 mb-2">Category name *</label>
                 <input
                   type="text"
                   className="border border-gray-300 p-2 rounded w-full"
@@ -154,7 +143,6 @@ const Pro: React.FC = () => {
           </div>
         )}
 
-        {/* Adding Product Form */}
         {isProduct ? (
           <form onSubmit={handleSubmit(onSubmit)} className="bg-white rounded-lg w-full">
             <div className="flex justify-between items-center mb-6">
@@ -172,7 +160,7 @@ const Pro: React.FC = () => {
                 {currentStep > 1 && (
                   <button
                     type="button"
-                    onClick={prevStep}
+                    onClick={() => setCurrentStep((prev) => Math.max(prev - 1, 1))}
                     className="px-4 py-2 bg-[#E1E7EB] w-[160px] text-[16px] font-[600] rounded text-[#1F8CD0] hover:bg-gray-300"
                   >
                     Back
@@ -181,7 +169,7 @@ const Pro: React.FC = () => {
                 {currentStep < 4 && (
                   <button
                     type="button"
-                    onClick={nextStep}
+                    onClick={() => setCurrentStep((prev) => Math.min(prev + 1, 4))}
                     className="px-4 py-2 text-[16px] font-[600] bg-[#1F8CD0] text-white rounded hover:bg-blue-700 w-[160px]"
                   >
                     Next
@@ -198,10 +186,15 @@ const Pro: React.FC = () => {
               </div>
             </div>
 
-            {/* Step Components */}
-            {currentStep === 1 && <Form1 register={register} errors={errors} />}
-            {currentStep === 2 && <Form2 register={register} errors={errors} control={control} />}
-            {currentStep === 3 && <Form3 register={register} errors={errors} control={control} />}
+            {currentStep === 1 && (
+             <Form1 register={register} errors={errors} categories={categories} />
+            )}
+            {currentStep === 2 && (
+              <Form2 register={register} errors={errors} control={control} />
+            )}
+            {currentStep === 3 && (
+              <Form3 register={register} errors={errors} control={control} />
+            )}
             {currentStep === 4 && <Form4 register={register} errors={errors} />}
           </form>
         ) : (

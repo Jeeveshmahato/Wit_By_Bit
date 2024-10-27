@@ -1,95 +1,80 @@
 import React, { useState } from "react";
-import { UseFormRegister } from "react-hook-form";
-import { RiArrowRightSLine } from "react-icons/ri";
+import { UseFormRegister, FieldErrors } from "react-hook-form";
 
 interface Form4Props {
   register: UseFormRegister<any>;
-  errors: any;
+  errors: FieldErrors<{
+    products: { priceInr: number; discount: { value: number } };
+  }>;
 }
 
 const Form4: React.FC<Form4Props> = ({ register, errors }) => {
-  const [selected, setSelected] = useState("%");
+  const [discountType, setDiscountType] = useState("%");
 
   return (
-    <>
-      {/* Steps */}
-      <div className="flex items-center space-x-4 mb-8">
-        <span className="text-[#1F8CD0] text-[14px] font-[500] bg-[#DAEDF9] rounded-[8px] py-1 px-2">
-          Description
-        </span>
-        <span className="text-gray-400">
-          <RiArrowRightSLine />
-        </span>
-        <span className="text-[#1F8CD0] text-[14px] font-[500] bg-[#DAEDF9] rounded-[8px] py-1 px-2">
-          Variants
-        </span>
-        <span className="text-gray-400">
-          <RiArrowRightSLine />
-        </span>
-        <span className="text-[#1F8CD0] text-[14px] font-[500] bg-[#DAEDF9] rounded-[8px] py-1 px-2">
-          Combinations
-        </span>
-        <span className="text-gray-400">
-          <RiArrowRightSLine />
-        </span>
-        <span className="text-[#1F8CD0] text-[14px] font-[500] bg-[#DAEDF9] rounded-[8px] py-1 px-2">
-          Price info
-        </span>
+    <div className="p-6 shadow-[0_0_20px_-2px_rgba(0,0,0,0.1)] p-[24px] flex flex-col lg:w-[60%] w-full gap-[24px">
+      <h3 className="text-[16px] font-[600] mb-4">Price Info</h3>
+      <div>
+        <label className=" text-[14px] font-[400]" htmlFor="">
+          Price *
+        </label>
+        <input
+          type="number"
+          {...register("products.priceInr", { required: "Price is required" })}
+          placeholder="Enter Price (INR)"
+          className="border p-2 rounded w-full"
+        />
       </div>
+      {/* Correctly accessing priceInr error with optional chaining */}
+      {errors?.products?.priceInr && (
+        <p className="text-red-500">{errors.products.priceInr.message}</p>
+      )}
 
-      <div className="shadow-[0_0_20px_-2px_rgba(0,0,0,0.1)] p-[24px] lg:w-[60%] w-full">
-        <h3 className="text-xl font-bold mb-4">Price & Discount</h3>
+      <div className=" mt-[24px]">
+        <label className=" text-[14px] font-[400]" htmlFor="">
+          Discount
+        </label>
 
-        <div className="mb-4">
-          <label>Price (INR) *</label>
+        <div className="flex gap-4 items-center mt-4">
           <input
+        
             type="number"
-            {...register("products.priceInr", { required: "Price is required" })}
-            className="border border-gray-300 p-2 rounded w-full"
-            placeholder="Enter price"
+            {...register("products.discount.value", {
+              required: "Discount is required",
+            })}
+            placeholder="Enter discount"
+            className="border p-2 rounded w-full"
           />
-          {errors.products?.priceInr && (
-            <span className="text-red-500">{errors.products.priceInr.message}</span>
+          {/* Correctly accessing discount.value error with optional chaining */}
+          {errors?.products?.discount?.value && (
+            <p className="text-red-500">
+              {errors.products.discount.value.message}
+            </p>
           )}
-        </div>
 
-        <div className="mb-4 flex items-center gap-[20px]">
-          <div>
-            <label>Discount *</label>
-            <input
-              type="number"
-              {...register("products.discount.value", { required: "Discount is required" })}
-              className="border border-gray-300 p-2 rounded w-full"
-              placeholder="Enter discount"
-            />
-            {errors.products?.discount?.value && (
-              <span className="text-red-500">{errors.products.discount.value.message}</span>
-            )}
-          </div>
-
-          <div className="inline-flex self-end items-center h-fit border border-gray-300 rounded-md overflow-hidden">
+          <div className="inline-flex">
             <button
-              type="button" // Added type="button" to prevent form submission
-              onClick={() => setSelected("%")}
-              className={`px-4 py-2 ${
-                selected === "%" ? "bg-blue-100 text-black" : "bg-white text-gray-500"
-              }`}
+              type="button"
+              onClick={() => setDiscountType("%")}
+              className={`${
+                discountType === "%" ? "bg-blue-100" : "bg-white"
+              } px-4 py-2`}
             >
               %
             </button>
             <button
-              type="button" // Added type="button" to prevent form submission
-              onClick={() => setSelected("$")}
-              className={`px-4 py-2 ${
-                selected === "$" ? "bg-blue-100 text-black" : "bg-white text-gray-500"
-              }`}
+              type="button"
+              onClick={() => setDiscountType("$")}
+              className={`${
+                discountType === "$" ? "bg-blue-100" : "bg-white"
+              } px-4 py-2`}
             >
               $
             </button>
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 
